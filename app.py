@@ -1,11 +1,29 @@
 from flask import Flask, g
+from flask_cors import CORS
+from flask_login import LoginManager
 
 import models
+
+from api.user import user
 
 DEBUG = True
 PORT = 8000
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path="", static_folder="static")
+
+app.secret_key="secret secret are no fun, secret secret hurt someone lol"
+login_manager = LoginManager(app)
+
+@login_manager.user_loader
+def load_user(userid):
+    try:
+        return models.User.get(models.User.id == userid)
+    except models.DoesNotExist:
+        return None
+
+CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
+
+app.register_blueprint(user)
 
 @app.before_request
 def before_request():
@@ -22,4 +40,5 @@ def index():
     return "feelings server lol"
 
 if __name__ == '__main__':
+    models.initialize()
     app.run(debug=DEBUG, port=PORT)

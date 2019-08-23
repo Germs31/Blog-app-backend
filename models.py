@@ -1,5 +1,6 @@
 from peewee import *
 from flask_login import UserMixin
+import datetime
 
 DATABASE = SqliteDatabase('blogs.sqlite')
 
@@ -13,7 +14,7 @@ class User(UserMixin, Model):
         database = DATABASE
 
 class Blog(Model):
-    title = CharField()
+    title = CharField(unique=True)
     author = CharField()
     text = CharField()
     created_at = DateTimeField(default=datetime.datetime.now)

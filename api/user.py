@@ -13,10 +13,11 @@ from playhouse.shortcuts import model_to_dict
 
 user = Blueprint('users', 'user', url_prefix='/user')
 
-def save_pic(form_picute):
+def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     f_name, f_ext = os.path.splitext(form_picture.filename)
     picture_name = random_hex + f_ext
+    file_path_for_avatar = os.path.join(os.getcwd(), 'static/profile_pics/' + picture_name)
     output_size = (125, 175)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
@@ -44,7 +45,7 @@ def register():
 
     except models.DoesNotExist:
 
-        payload['password'] = gernerate_password_hash(payload['password'])
+        payload['password'] = generate_password_hash(payload['password'])
         file_picture_path = save_picture(dict_file['file'])
         payload['image'] = file_picture_path
         user = models.User.create(**payload)

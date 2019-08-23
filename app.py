@@ -9,10 +9,12 @@ from api.user import user
 DEBUG = True
 PORT = 8000
 
+login_manager = LoginManager()
+
 app = Flask(__name__, static_url_path="", static_folder="static")
 
 app.secret_key="secret secret are no fun, secret secret hurt someone lol"
-login_manager = LoginManager(app)
+login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(userid):

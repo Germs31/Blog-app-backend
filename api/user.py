@@ -25,6 +25,8 @@ def save_picture(form_picture):
 
     return picture_name
 
+##########################################################################
+
 
 @user.route('/register', methods=["POST"])
 def register():
@@ -62,7 +64,8 @@ def register():
 
         return jsonify(data=user_dict, status={"code": 201, "message": "Success"})
 
-# @user.route('/register', methods=["POST"])
+#################################################################################
+
 @user.route('/login', methods=["POST"])
 def login():
     print('hello')
@@ -83,3 +86,42 @@ def login():
     
     except models.DoesNotExist:
         return jsonify(data=user_dict, status={"code": 401, "message": "FUCK OUT OF HERE, YOU DONT EXIST"})
+
+##################################################################################
+
+
+@user.route('<id>/edit', methods=["PUT"])
+def update_user(id):
+
+    payload = request.get_json(force=True)
+    print(payload)
+
+    query = models.User.update(**payload).where(models.User.id == id)
+    query.execute()
+
+    updated_user = models.User.get_by_id(id)
+
+
+    return jsonify(data=model_to_dict(updated_user), status={"code": 200, "message": "success"})
+
+
+
+
+
+##################################################################################
+
+@user.route('<id>/blogs', methods=["GET"])
+def get_user_blogs(id):
+
+    user = models.User.get_by_id(id)
+    print(user.blogs) 
+
+    blogs = [model_to_dict(blog) for blog in user.blogs]
+
+    def delete_key(item, key):
+        del item[key]
+        return item
+
+    blog_without_user = [delete_key(blog, 'user') for blog in blogs]
+
+    return jsonify(data=blog_without_user, status={"code": 200, "message": "Success"})

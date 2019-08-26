@@ -5,9 +5,9 @@ import os
 
 from playhouse.db_url import connect
 
-# DATABASE = connect(os.environ.get('DATABASE_URL'))
+DATABASE = connect(os.environ.get('DATABASE_URL'))
 
-DATABASE = SqliteDatabase('blogs.sqlite')
+# DATABASE = SqliteDatabase('blogs.sqlite')
 
 class User(UserMixin, Model):
     username = CharField(unique=True)

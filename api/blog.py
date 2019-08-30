@@ -21,11 +21,11 @@ def get_all_blogs():
 
 @blog.route('/', methods=["POST"])
 def create_blogs():
-    payload = request.get_json()
+    payload = request.get_json(force=True)
 
     blog = models.Blog.create(**payload)
-
-    blog_dict = model-to_dict(blog)
+    blog.created_by_id = 1
+    blog_dict = model_to_dict(blog)
 
     return jsonify(data=blog_dict, status={"code": 201, "message": "success"})
 
@@ -43,8 +43,8 @@ def get_one_blog(id):
 
 @blog.route('/<id>', methods=["PUT"])
 def update_blog(id):
-    payload = request.get_json()
-
+    payload = request.get_json(force=True)
+    print(payload, 'it the payload')
     query = models.Blog.update(**payload).where(models.Blog.id == id)
     query.execute()
 
@@ -55,12 +55,10 @@ def update_blog(id):
 ##################################################################################
 
 
-@dog.route('/<id>', methods=["DELETE"])
-def delete_blog(id)
-
+@blog.route('/<id>', methods=["DELETE"])
+def delete_blog(id):
     query = models.Blog.delete().where(models.Blog.id == id)
     query.execute()
-
     return jsonify(data='resources successfully deleted', status={"code": 200, "message": "resource deleted"}) 
 
 

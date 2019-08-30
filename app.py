@@ -6,6 +6,7 @@ import os
 import models
 
 from api.user import user
+from api.blog import blog
 
 DEBUG = True
 PORT = 8000
@@ -25,8 +26,10 @@ def load_user(userid):
         return None
 
 CORS(user, origins=['http://localhost:3000', 'https://boiling-mountain-12693.herokuapp.com'], supports_credentials=True)
+CORS(blog, origins=['http://localhost:3000', 'https://boiling-mountain-12693.herokuapp.com'], supports_credentials=True)
 
 app.register_blueprint(user)
+app.register_blueprint(blog)
 
 @app.before_request
 def before_request():

@@ -90,7 +90,7 @@ def login():
 ##################################################################################
 
 
-@user.route('<id>/edit', methods=["PUT"])
+@user.route('/<id>', methods=["PUT"])
 def update_user(id):
 
     payload = request.get_json(force=True)
@@ -110,18 +110,40 @@ def update_user(id):
 
 ##################################################################################
 
-@user.route('<id>/blogs', methods=["GET"])
-def get_user_blogs(id):
+# @user.route('<id>/blogs', methods=["GET"])
+# def get_user_blogs(id):
+
+#     user = models.User.get_by_id(id)
+#     print(user.blogs) 
+
+#     blogs = [model_to_dict(blog) for blog in user.blogs]
+
+#     def delete_key(item, key):
+#         del item[key]
+#         return item
+
+#     blog_without_user = [delete_key(blog, 'user') for blog in blogs]
+
+#     return jsonify(data=blog_without_user, status={"code": 200, "message": "Success"})
+
+##################################################################################
+
+
+@user.route('/<id>', methods=["GET"])
+def get_user(id):
+
+    query = models.User.get(models.User.id == id)
 
     user = models.User.get_by_id(id)
-    print(user.blogs) 
 
-    blogs = [model_to_dict(blog) for blog in user.blogs]
 
-    def delete_key(item, key):
-        del item[key]
-        return item
+    return jsonify(data=model_to_dict(user), status={"code": 200, "message": "success"})
 
-    blog_without_user = [delete_key(blog, 'user') for blog in blogs]
+##################################################################################
 
-    return jsonify(data=blog_without_user, status={"code": 200, "message": "Success"})
+@user.route('/<id>', methods=["DELETE"])
+def delete_user(id):
+    query = models.User.delete().where(models.User.id == id)
+    query.execute()
+    return jsonify(data='resources successfully deleted', status={"code": 200, "message": "resource deleted"}) 
+

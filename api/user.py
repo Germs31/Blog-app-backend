@@ -110,21 +110,21 @@ def update_user(id):
 
 ##################################################################################
 
-# @user.route('<id>/blogs', methods=["GET"])
-# def get_user_blogs(id):
+@user.route('<id>/blogs', methods=["GET"])
+def get_user_blogs(id):
 
-#     user = models.User.get_by_id(id)
-#     print(user.blogs) 
+    user = models.User.get_by_id(id)
+    print(user.blogs) 
 
-#     blogs = [model_to_dict(blog) for blog in user.blogs]
+    blogs = [model_to_dict(blog) for blog in user.blogs]
 
-#     def delete_key(item, key):
-#         del item[key]
-#         return item
+    def delete_key(item, key):
+        del item[key]
+        return item
 
-#     blog_without_user = [delete_key(blog, 'user') for blog in blogs]
+    blog_without_user = [delete_key(blog, 'user') for blog in blogs]
 
-#     return jsonify(data=blog_without_user, status={"code": 200, "message": "Success"})
+    return jsonify(data=blog_without_user, status={"code": 200, "message": "Success"})
 
 ##################################################################################
 
